@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  mongoA:
+    image: mongo:7.0
+    container_name: mongoA
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongoadmin
+      MONGO_INITDB_ROOT_PASSWORD: mongopass
+    ports:
+      - 27017:27017
+    volumes:
+      - volumeA:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+volumes:
+  volumeA:
+    driver: local
