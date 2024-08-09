@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  webapp:
+    image: webapp
+    container_name: webapp
+    stdin_open: true
+    ports: 
+      - "3000:3000"
+    networks:
+      - mern-app
+    depends_on:
+      - appapp
+  appapp:
+    image: appapp
+    container_name: appapp
+    ports:
+      - "5001:5001"
+    networks:
+      - mern-app
+    depends_on:
+      - mongoapp
+  mongoapp:
+    image: mongo:7.0
+    container_name: mongoapp
+    ports:
+      - "27017:27017"
+    networks:
+      - mern-app
+    volumes:
+      - volumeapp:/data/db
+      - ./mongoapp/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+networks:
+  mern-app:
+    driver: bridge
+volumes:
+  volumeapp:
+    driver: local
