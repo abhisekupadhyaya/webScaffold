@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  websoft:
+    image: websoft
+    container_name: websoft
+    stdin_open: true
+    ports: 
+      - "3000:3000"
+    networks:
+      - mern-app
+    depends_on:
+      - appsoft
+  appsoft:
+    image: appsoft
+    container_name: appsoft
+    ports:
+      - "5001:5001"
+    networks:
+      - mern-app
+    depends_on:
+      - mongosoft
+  mongosoft:
+    image: mongo:7.0
+    container_name: mongosoft
+    ports:
+      - "27017:27017"
+    networks:
+      - mern-app
+    volumes:
+      - volumesoft:/data/db
+      - ./mongosoft/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+networks:
+  mern-app:
+    driver: bridge
+volumes:
+  volumesoft:
+    driver: local
